@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 ]
 
-SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,7 +73,7 @@ TEMPLATES = [
         },
     },
 ]
-AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = (
     
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -80,7 +81,25 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
     
-]
+)
+SITE_ID = 1 
+
+# email configs
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+ACCOUNT_EMAIL_REQUIRED = True
+EMAIL_PORT = 587 #gmail port. however it could be changed in the future
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+EMAIL_HOST_USER = str(os.getenv('EMAIL_USER'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_PASSWORD'))
+LOGIN_REDIRECT_URL = '/success'
+LOGIN_URL = '/accounts/login/'
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
